@@ -1,0 +1,87 @@
+model Subject {
+  id            String         @id @default(cuid())
+  name          String         @unique
+  quizAttempts  QuizAttempt[]
+  topics        Topic[]
+  tutorSubjects TutorSubject[]
+  courses       Course[]
+
+  @@map("subjects")
+}
+
+model Topic {
+  id        String     @id @default(cuid())
+  subjectId String     @map("subject_id")
+  name      String
+  questions Question[]
+  materials LearningMaterial[]
+  subject   Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectId, name])
+  @@index([subjectId])
+  @@map("topics")
+}
+
+model Question {
+  id             String              @id @default(cuid())
+  topicId        String              @map("topic_id")
+  createdById    String?             @map("created_by_id")
+  isPublished    Boolean             @default(true) @map("is_published")
+  gradeLevel     GradeLevel          @map("grade_level")
+  questionText   String              @map("question_text")
+  explanation    String
+  options        QuestionOption[]
+  topic          Topic               @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  createdBy      User?               @relation("QuestionAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  attemptAnswers QuizAttemptAnswer[]
+
+  @@index([topicId])
+  @@index([gradeLevel])
+  @@map("questions")
+}
+
+model QuestionOption {
+  id             String              @id @default(cuid())
+  questionId     String              @map("question_id")
+  optionText     String              @map("option_text")
+  isCorrect      Boolean             @default(false) @map("is_correct")
+  question       Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  attemptAnswers QuizAttemptAnswer[]
+
+  @@index([questionId])
+  @@map("question_options")
+}
+
+model QuizAttempt {
+  id          String              @id @default(cuid())
+  studentId   String              @map("student_id")
+  subjectId   String              @map("subject_id")
+  gradeLevel  GradeLevel          @map("grade_level")
+  score       Int
+  startedAt   DateTime            @default(now()) @map("started_at")
+  completedAt DateTime?           @map("completed_at")
+  answers     QuizAttemptAnswer[]
+  student     StudentProfile      @relation(fields: [studentId], references: [userId], onDelete: Cascade)
+  subject     Subject             @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([subjectId])
+  @@map("quiz_attempts")
+}
+
+model QuizAttemptAnswer {
+  id               String         @id @default(cuid())
+  attemptId        String         @map("attempt_id")
+  questionId       String         @map("question_id")
+  selectedOptionId String         @map("selected_option_id")
+  selectedOptionText String       @map("selected_option_text")
+  correctOptionText String        @map("correct_option_text")
+  isCorrect        Boolean        @map("is_correct")
+  attempt          QuizAttempt    @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question         Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedOption   QuestionOption @relation(fields: [selectedOptionId], references: [id], onDelete: Cascade)
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId])
+  @@map("quiz_attempt_answers")
+}

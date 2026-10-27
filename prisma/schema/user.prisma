@@ -1,0 +1,58 @@
+model Region {
+  id    String @id @default(cuid())
+  name  String @unique
+  users User[]
+
+  @@map("regions")
+}
+
+model User {
+  id                   String              @id @default(cuid())
+  fullName             String              @map("full_name")
+  phoneOrEmail         String              @unique @map("phone_or_email")
+  passwordHash         String              @map("password_hash")
+  role                 UserRole            @default(STUDENT)
+  status               AccountStatus       @default(APPROVED)
+  regionId             String?             @map("region_id")
+  profileImageUrl      String?             @map("profile_image_url")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  sentMessages         Message[]           @relation("MessageSender")
+  
+
+  sessionMessages      Message[]           @relation("SessionMessageSender")
+
+  reportsAgainst       Report[]            @relation("ReportedUser")
+  reportsFiled         Report[]            @relation("ReportsFiled")
+  reportsReviewed      Report[]            @relation("ReportsReviewed")
+  studentProfile       StudentProfile?
+  provisionedPackages  PackageEnrollment[] @relation("PackageProvisioner")
+  studentPayments      Payment[]           @relation("StudentPayments")
+  reviewedCompletions  CourseCompletion[]  @relation("CourseCompletionReviewer")
+  authoredQuestions    Question[]          @relation("QuestionAuthor")
+  authoredLearningMaterials LearningMaterial[] @relation("LearningMaterialAuthor")
+  applicationsReviewed TutorApplication[]  @relation("ReviewerApplications")
+  applicationsFiled    TutorApplication[]  @relation("ApplicantApplications")
+  approvedTutorProfiles TutorProfile[]     @relation("ApprovedByAdmin")
+  tutorProfile         TutorProfile?       @relation("TutorIdentity")
+  region               Region?             @relation(fields: [regionId], references: [id])
+
+  @@index([role])
+  @@index([status])
+  @@map("users")
+}
+
+model StudentProfile {
+  userId             String              @id @map("user_id")
+  gradeLevel         GradeLevel          @map("grade_level")
+  conversations      Conversation[]
+  quizAttempts       QuizAttempt[]
+  packageEnrollments PackageEnrollment[]
+  courseCompletions  CourseCompletion[]
+  ratingsGiven       Rating[]
+  mentorshipSeries   MentorshipSeries[]
+  mentorshipSessions MentorshipSession[]
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("student_profiles")
+}

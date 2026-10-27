@@ -1,0 +1,90 @@
+model PackageOffer {
+  id          String             @id
+  packageType LearningPackageType @map("package_type")
+  courseId    String?            @map("course_id")
+  gradeLevel  GradeLevel?        @map("grade_level")
+  amountMinor Int                @map("amount_minor")
+  standardAmountMinor Int                @map("standard_amount_minor")
+  customAmountMinor Int?         @map("custom_amount_minor")
+  pricingMode PackagePricingMode @default(STANDARD) @map("pricing_mode")
+  currency    String             @default("ETB")
+  active      Boolean            @default(true)
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+  course      Course?            @relation(fields: [courseId], references: [id], onDelete: Restrict)
+
+  @@index([packageType, active])
+  @@map("package_offers")
+}
+
+enum PackagePricingMode {
+  STANDARD
+  CUSTOM
+}
+
+model PaymentConfig {
+  id             String   @id @default("default")
+  commissionBps  Int      @default(1000) @map("commission_bps")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("payment_config")
+}
+
+model Payment {
+  id                    String             @id @default(cuid())
+  txRef                 String             @unique @map("tx_ref")
+  chapaReference        String?            @map("chapa_reference")
+  studentId             String             @map("student_id")
+  tutorId               String             @map("tutor_id")
+  packageType           LearningPackageType @map("package_type")
+  courseId              String?            @map("course_id")
+  gradeLevel            GradeLevel?        @map("grade_level")
+  amountMinor           Int                @map("amount_minor")
+  commissionBps         Int                @map("commission_bps")
+  commissionMinor       Int                @map("commission_minor")
+  tutorAmountMinor      Int                @map("tutor_amount_minor")
+  currency              String             @default("ETB")
+  status                PaymentStatus      @default(INITIALIZING)
+  checkoutUrl           String?            @map("checkout_url")
+  failureReason         String?            @map("failure_reason")
+  createdAt             DateTime           @default(now()) @map("created_at")
+  verifiedAt            DateTime?          @map("verified_at")
+  student               User               @relation("StudentPayments", fields: [studentId], references: [id], onDelete: Restrict)
+  tutor                 TutorProfile       @relation(fields: [tutorId], references: [userId], onDelete: Restrict)
+  course                Course?            @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  enrollment            PackageEnrollment?
+  payout                TutorPayout?
+
+  @@index([studentId, createdAt])
+  @@index([tutorId, status, createdAt])
+  @@index([status, createdAt])
+  @@map("payments")
+}
+
+model TutorPayout {
+  id             String      @id @default(cuid())
+  paymentId      String      @unique @map("payment_id")
+  tutorId        String      @map("tutor_id")
+  amountMinor    Int         @map("amount_minor")
+  currency       String      @default("ETB")
+  status         PayoutStatus @default(AVAILABLE)
+  payoutReference String?    @map("payout_reference")
+  createdAt      DateTime    @default(now()) @map("created_at")
+  paidAt         DateTime?   @map("paid_at")
+  payment        Payment     @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  tutor          TutorProfile @relation(fields: [tutorId], references: [userId], onDelete: Restrict)
+
+  @@index([tutorId, status, createdAt])
+  @@map("tutor_payouts")
+}
+
+enum PaymentStatus {
+  INITIALIZING
+  PENDING
+  PAID
+  FAILED
+}
+
+enum PayoutStatus {
+  AVAILABLE
+  PAID
+}

@@ -1,0 +1,88 @@
+model TutorGoogleAccount {
+  tutorId         String       @id @map("tutor_id")
+  refreshToken    String       @map("refresh_token")
+  calendarId      String       @default("primary") @map("calendar_id")
+  connectedAt     DateTime     @default(now()) @map("connected_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  tutor           TutorProfile @relation(fields: [tutorId], references: [userId], onDelete: Cascade)
+
+  @@map("tutor_google_accounts")
+}
+
+model TutorAvailability {
+  id        String                @id @default(cuid())
+  tutorId   String                @map("tutor_id")
+  startsAt  DateTime              @map("starts_at")
+  endsAt    DateTime              @map("ends_at")
+  status    AvailabilityStatus    @default(AVAILABLE)
+  createdAt DateTime              @default(now()) @map("created_at")
+  tutor     TutorProfile          @relation(fields: [tutorId], references: [userId], onDelete: Cascade)
+  session   MentorshipSession?
+
+  @@index([tutorId, startsAt, status])
+  @@map("tutor_availability")
+}
+
+model MentorshipSeries {
+  id                  String              @id @default(cuid())
+  studentId           String              @map("student_id")
+  tutorId             String              @map("tutor_id")
+  enrollmentId        String              @map("enrollment_id")
+  courseId            String              @map("course_id")
+  conversationId      String              @map("conversation_id")
+  weekStart           DateTime            @map("week_start")
+  createdAt           DateTime            @default(now()) @map("created_at")
+  student             StudentProfile      @relation(fields: [studentId], references: [userId], onDelete: Cascade)
+  tutor               TutorProfile        @relation(fields: [tutorId], references: [userId], onDelete: Cascade)
+  enrollment          PackageEnrollment   @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  course              Course              @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  conversation        Conversation        @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sessions            MentorshipSession[]
+
+  @@unique([enrollmentId, courseId, weekStart])
+  @@index([studentId, weekStart])
+  @@index([tutorId, weekStart])
+  @@map("mentorship_series")
+}
+
+model MentorshipSession {
+  id             String                 @id @default(cuid())
+  seriesId       String                 @map("series_id")
+  availabilityId String                 @unique @map("availability_id")
+  studentId      String                 @map("student_id")
+  tutorId        String                 @map("tutor_id")
+  enrollmentId   String                 @map("enrollment_id")
+  courseId       String                 @map("course_id")
+  conversationId String                 @map("conversation_id")
+  startsAt       DateTime               @map("starts_at")
+  endsAt         DateTime               @map("ends_at")
+  meetUrl        String?                @map("meet_url")
+  googleEventId  String?                @map("google_event_id")
+  status         MentorshipSessionStatus @default(SCHEDULED)
+  createdAt      DateTime               @default(now()) @map("created_at")
+  series         MentorshipSeries       @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  availability   TutorAvailability      @relation(fields: [availabilityId], references: [id], onDelete: Restrict)
+  student        StudentProfile         @relation(fields: [studentId], references: [userId], onDelete: Cascade)
+  tutor          TutorProfile           @relation(fields: [tutorId], references: [userId], onDelete: Cascade)
+  enrollment     PackageEnrollment      @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  course         Course                 @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  conversation   Conversation           @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  messages       Message[]
+
+  @@index([studentId, startsAt])
+  @@index([tutorId, startsAt])
+  @@index([courseId, startsAt])
+  @@map("mentorship_sessions")
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  BOOKED
+  CANCELLED
+}
+
+enum MentorshipSessionStatus {
+  SCHEDULED
+  CANCELLED
+  COMPLETED
+}

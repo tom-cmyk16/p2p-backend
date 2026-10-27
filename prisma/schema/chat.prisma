@@ -1,0 +1,64 @@
+model Conversation {
+  id                 String             @id @default(cuid())
+  studentId          String             @map("student_id")
+  tutorId            String             @map("tutor_id")
+  status             ConversationStatus @default(ACTIVE)
+  createdAt          DateTime           @default(now()) @map("created_at")
+  student            StudentProfile     @relation(fields: [studentId], references: [userId], onDelete: Cascade)
+  tutor              TutorProfile       @relation(fields: [tutorId], references: [userId], onDelete: Cascade)
+  messages           Message[]
+  rating             Rating?
+  reports            Report[]
+  mentorshipSeries   MentorshipSeries[]
+  mentorshipSessions MentorshipSession[]
+  packageEnrollmentId String?           @map("package_enrollment_id")
+  packageEnrollment  PackageEnrollment? @relation(fields: [packageEnrollmentId], references: [id], onDelete: SetNull)
+
+  @@unique([studentId, tutorId])
+  @@index([studentId])
+  @@index([tutorId])
+  @@map("conversations")
+}
+
+model Message {
+  id             String             @id @default(cuid())
+  conversationId String             @map("conversation_id")
+  senderId       String             @map("sender_id")
+  type           MessageType        @default(TEXT)
+  textContent    String?            @map("text_content")
+  fileUrl        String?            @map("file_url")
+  fileName       String?            @map("file_name")
+  status         MessageStatus      @default(SENT)
+  isDeleted      Boolean            @default(false) @map("is_deleted")
+  sentAt         DateTime           @default(now()) @map("sent_at")
+  conversation   Conversation       @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  sender         User               @relation("MessageSender", fields: [senderId], references: [id], map: "messages_sender_id_fkey")
+  reports        Report[]
+  sessionId      String?            @map("session_id")
+  session        MentorshipSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  
+  sessionSender  User?              @relation("SessionMessageSender", fields: [senderId], references: [id], onDelete: Cascade, map: "messages_session_sender_id_fkey")
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([sessionId, sentAt])
+  @@map("messages")
+}
+
+enum ConversationStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  DOCUMENT
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}

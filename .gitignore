@@ -1,0 +1,9 @@
+.env
+.env.*
+/src/generated/prisma
+/src/generated/prisma
+
+/uploads/
+/private_uploads/
+
+node_modules

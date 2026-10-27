@@ -1,0 +1,51 @@
+model Rating {
+  id             String         @id @default(cuid())
+  conversationId String         @unique @map("conversation_id")
+  studentId      String         @map("student_id")
+  tutorId        String         @map("tutor_id")
+  score          Int
+  comment        String?
+  createdAt      DateTime       @default(now()) @map("created_at")
+  conversation   Conversation   @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  student        StudentProfile @relation(fields: [studentId], references: [userId], onDelete: Cascade)
+  tutor          TutorProfile   @relation(fields: [tutorId], references: [userId], onDelete: Cascade)
+
+  @@index([tutorId])
+  @@map("ratings")
+}
+
+model Report {
+  id                     String           @id @default(cuid())
+  reporterId             String           @map("reporter_id")
+  targetType             ReportTargetType @map("target_type")
+  reportedMessageId      String?          @map("reported_message_id")
+  reportedConversationId String?          @map("reported_conversation_id")
+  reportedUserId         String?          @map("reported_user_id")
+  reason                 String
+  status                 ReportStatus     @default(PENDING)
+  reviewedById           String?          @map("reviewed_by")
+  createdAt              DateTime         @default(now()) @map("created_at")
+  resolvedAt             DateTime?        @map("resolved_at")
+  reportedConversation   Conversation?    @relation(fields: [reportedConversationId], references: [id], onDelete: Cascade)
+  reportedMessage        Message?         @relation(fields: [reportedMessageId], references: [id], onDelete: Cascade)
+  reportedUser           User?            @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: Cascade)
+  reporter               User             @relation("ReportsFiled", fields: [reporterId], references: [id])
+  reviewedBy             User?            @relation("ReportsReviewed", fields: [reviewedById], references: [id])
+
+  @@index([status])
+  @@index([reporterId])
+  @@map("reports")
+}
+
+enum ReportTargetType {
+  MESSAGE
+  CONVERSATION
+  USER_PROFILE
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  ACTION_TAKEN
+  DISMISSED
+}

@@ -1,0 +1,302 @@
+[
+  {
+    "id": "exam_7ae9e513-4617-46a0-83a1-3e3e68efcd01",
+    "title": "english",
+    "gradeLevel": "GRADE_10",
+    "subjectId": "cmvmwq9at0001hww1w4dzphqb",
+    "subjectName": "english",
+    "topicIds": [
+      "cmvmwquzq0002hww1q098jukx"
+    ],
+    "durationMinutes": 10,
+    "passingScore": 60,
+    "instructions": "don't copay write",
+    "isPublished": true,
+    "createdById": "cmvmspsx40004sww13gu1794q",
+    "createdAt": "2026-10-25T11:39:04.738Z",
+    "updatedAt": "2026-10-25T16:15:27.293Z",
+    "questions": [
+      {
+        "id": "q_52568790-d916-4d18-a1f7-c266a24baffe",
+        "questionText": "What is the SI unit of electric force?",
+        "options": [
+          {
+            "id": "opt_7b47b2d9-183e-4cd8-ae81-be03ffa1626c",
+            "optionText": "Newton",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_09f6f7d3-977a-492f-be29-fe972d7cabc2",
+            "optionText": "Joule",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_52ddec1f-bd31-4866-ae3a-ffd7d79391bb",
+            "optionText": "Watt",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_d583dfa4-ddc8-4117-8b94-e77020ed9524",
+            "optionText": "Pascal",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Force is measured in Newtons (N)",
+        "gradeLevel": "GRADE_10",
+        "topicId": "cmvmwquzq0002hww1q098jukx",
+        "createdAt": "2026-10-25T11:39:04.738Z"
+      },
+      {
+        "id": "q_d67b5995-9e9e-457c-b199-ee27d31ac497",
+        "questionText": "Which organelle is known as the powerhouse of the cell?",
+        "options": [
+          {
+            "id": "opt_ad47b1a5-5532-43e4-b18c-c3a91c643645",
+            "optionText": "Nucleus",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_ce6baf27-3f0a-468e-ba67-c64f0b50095d",
+            "optionText": "Mitochondria",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_80771e7d-b5cf-4c78-a95a-1caeb3fc6fda",
+            "optionText": "Ribosome",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_3ed46821-9f44-428b-9eae-37c57c7ba2b5",
+            "optionText": "Chloroplast",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Mitochondria produce cellular ATP energy",
+        "gradeLevel": "GRADE_10",
+        "topicId": "cmvmwquzq0002hww1q098jukx",
+        "createdAt": "2026-10-25T11:39:04.738Z"
+      },
+      {
+        "id": "q_b492c9b0-576a-408d-99f7-865defab183d",
+        "questionText": "Simplify: (3x + 2) + (5x - 7)",
+        "options": [
+          {
+            "id": "opt_28067fa2-9915-4667-a4cb-fa0b38318a4a",
+            "optionText": "8x - 5",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_216c5825-d5f0-4e90-964b-8a3212ff10f6",
+            "optionText": "8x + 5",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_6e1d8ce1-d598-464c-92d0-16a62dd4d69d",
+            "optionText": "2x - 5",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_33e7c9bc-c9ff-4b59-9c71-18938ed3503f",
+            "optionText": "15x - 14",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Combining like terms: 3x+5x=8x, 2-7=-5",
+        "gradeLevel": "GRADE_10",
+        "topicId": "cmvmwquzq0002hww1q098jukx",
+        "createdAt": "2026-10-25T11:39:04.738Z"
+      },
+      {
+        "id": "q_8f450ae6-1b11-4bbb-b880-567ab83c8ed6",
+        "questionText": "What is the SI unit of electric force?",
+        "options": [
+          {
+            "id": "opt_a23bbffa-d2a9-49d8-ae40-944c037e9583",
+            "optionText": "Newton",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_df1380a8-317f-44a4-8c45-da3a0f035767",
+            "optionText": "Joule",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_b3d476a4-c469-442b-b4a5-3ab6d837e0fb",
+            "optionText": "Watt",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_7985f2c7-2ebd-451f-a074-649cc5b8d622",
+            "optionText": "Pascal",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Force is measured in Newtons (N)",
+        "gradeLevel": "GRADE_10",
+        "topicId": "cmvmwquzq0002hww1q098jukx",
+        "createdAt": "2026-10-25T13:43:39.696Z"
+      },
+      {
+        "id": "q_610422e7-8935-49c0-8b28-8d5f522f38c2",
+        "questionText": "Which organelle is known as the powerhouse of the cell?",
+        "options": [
+          {
+            "id": "opt_ed823c59-7707-4466-a78f-d1f3a545954a",
+            "optionText": "Nucleus",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_4f379edf-f17c-419c-8e26-43d739dcf87e",
+            "optionText": "Mitochondria",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_d77c1154-98d3-45d0-b57a-26082bf31d88",
+            "optionText": "Ribosome",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_51023f32-80f9-4b6b-8999-cfdff740980b",
+            "optionText": "Chloroplast",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Mitochondria produce cellular ATP energy",
+        "gradeLevel": "GRADE_10",
+        "topicId": "cmvmwquzq0002hww1q098jukx",
+        "createdAt": "2026-10-25T13:43:39.696Z"
+      },
+      {
+        "id": "q_2f5c9713-6190-4fb5-9302-49db14a976f5",
+        "questionText": "Simplify: (3x + 2) + (5x - 7)",
+        "options": [
+          {
+            "id": "opt_dde137ce-a1a1-4dbb-9b05-8765085fdec3",
+            "optionText": "8x - 5",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_643d8de6-a377-4eab-918e-4144e8aa1fd7",
+            "optionText": "8x + 5",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_b47cd8e0-9376-4627-b87c-78505bfae750",
+            "optionText": "2x - 5",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_d5b7df8e-cb0b-4fc2-87d0-78c02907d3b8",
+            "optionText": "15x - 14",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Combining like terms: 3x+5x=8x, 2-7=-5",
+        "gradeLevel": "GRADE_10",
+        "topicId": "cmvmwquzq0002hww1q098jukx",
+        "createdAt": "2026-10-25T13:43:39.696Z"
+      }
+    ]
+  },
+  {
+    "id": "exam_g9_math_mock_1",
+    "title": "Grade 9 Mathematics Comprehensive Mock Exam",
+    "gradeLevel": "GRADE_9",
+    "subjectId": "",
+    "subjectName": "Mathematics",
+    "topicIds": [],
+    "durationMinutes": 60,
+    "passingScore": 60,
+    "instructions": "Answer all questions. Each question has four options with exactly one correct answer. No calculators allowed.",
+    "isPublished": true,
+    "createdById": null,
+    "createdAt": "2026-10-25T08:22:37.618Z",
+    "updatedAt": "2026-10-25T08:22:37.618Z",
+    "questions": [
+      {
+        "id": "q_m9_1",
+        "questionText": "If 2x + 5 = 17, what is the value of 3x - 1?",
+        "options": [
+          {
+            "id": "opt_1",
+            "optionText": "17",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_2",
+            "optionText": "18",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_3",
+            "optionText": "12",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_4",
+            "optionText": "15",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "2x = 12 => x = 6. Then 3(6) - 1 = 18 - 1 = 17.",
+        "gradeLevel": "GRADE_9"
+      },
+      {
+        "id": "q_m9_2",
+        "questionText": "What is the slope of the line passing through points (2, 3) and (6, 11)?",
+        "options": [
+          {
+            "id": "opt_5",
+            "optionText": "2",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_6",
+            "optionText": "4",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_7",
+            "optionText": "1/2",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_8",
+            "optionText": "3",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "Slope m = (11 - 3) / (6 - 2) = 8 / 4 = 2.",
+        "gradeLevel": "GRADE_9"
+      },
+      {
+        "id": "q_m9_3",
+        "questionText": "Which of the following is a prime number?",
+        "options": [
+          {
+            "id": "opt_9",
+            "optionText": "29",
+            "isCorrect": true
+          },
+          {
+            "id": "opt_10",
+            "optionText": "27",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_11",
+            "optionText": "21",
+            "isCorrect": false
+          },
+          {
+            "id": "opt_12",
+            "optionText": "33",
+            "isCorrect": false
+          }
+        ],
+        "explanation": "29 has no divisors other than 1 and 29.",
+        "gradeLevel": "GRADE_9"
+      }
+    ]
+  }
+]

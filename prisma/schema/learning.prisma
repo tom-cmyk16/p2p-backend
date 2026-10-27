@@ -1,0 +1,88 @@
+model Course {
+  id           String             @id @default(cuid())
+  subjectId    String             @map("subject_id")
+  gradeLevel   GradeLevel         @map("grade_level")
+  isCore       Boolean            @default(true) @map("is_core")
+  contentAccessDays Int           @default(30) @map("content_access_days")
+  mentorshipDurationDays Int      @default(7) @map("mentorship_duration_days")
+  createdAt    DateTime           @default(now()) @map("created_at")
+  subject      Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  enrollments  PackageEnrollment[]
+  completions  CourseCompletion[]
+  mentorshipSeries MentorshipSeries[]
+  mentorshipSessions MentorshipSession[]
+  paymentOffers PackageOffer[]
+  payments Payment[]
+  materials LearningMaterial[]
+
+  @@unique([subjectId, gradeLevel])
+  @@index([gradeLevel, isCore])
+  @@map("courses")
+}
+
+model LearningMaterial {
+  id          String   @id @default(cuid())
+  courseId    String   @map("course_id")
+  topicId     String?  @map("topic_id")
+  createdById String?  @map("created_by_id")
+  title       String
+  description String?
+  url         String
+  isPublished Boolean  @default(true) @map("is_published")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topic       Topic?   @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  createdBy   User?    @relation("LearningMaterialAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([courseId, isPublished])
+  @@index([topicId])
+  @@map("learning_materials")
+}
+
+model PackageEnrollment {
+  id                 String              @id @default(cuid())
+  studentId          String              @map("student_id")
+  packageType        LearningPackageType @map("package_type")
+  courseId           String?             @map("course_id")
+  gradeLevel         GradeLevel?         @map("grade_level")
+  mentorshipMonths   Int                 @map("mentorship_months")
+  accessMonths       Int                 @map("access_months")
+  mentorshipDurationDays Int             @default(7) @map("mentorship_duration_days")
+  contentAccessDays Int                  @default(30) @map("content_access_days")
+  liveSessionCount   Int?                @map("live_session_count")
+  liveSessionsUsed   Int                 @default(0) @map("live_sessions_used")
+  startedAt          DateTime            @default(now()) @map("started_at")
+  mentorshipExpiresAt DateTime           @map("mentorship_expires_at")
+  accessExpiresAt    DateTime            @map("access_expires_at")
+  provisionedById    String?             @map("provisioned_by_id")
+  paymentId          String?             @unique @map("payment_id")
+  assignedTutorId    String?             @map("assigned_tutor_id")
+  course             Course?             @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  student            StudentProfile      @relation(fields: [studentId], references: [userId], onDelete: Cascade)
+  provisionedBy      User?               @relation("PackageProvisioner", fields: [provisionedById], references: [id], onDelete: SetNull)
+  payment            Payment?            @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  assignedTutor      TutorProfile?       @relation(fields: [assignedTutorId], references: [userId], onDelete: SetNull)
+  conversations      Conversation[]
+  mentorshipSeries   MentorshipSeries[]
+  mentorshipSessions MentorshipSession[]
+
+  @@index([studentId, accessExpiresAt])
+  @@index([studentId, mentorshipExpiresAt])
+  @@map("package_enrollments")
+}
+
+model CourseCompletion {
+  id            String         @id @default(cuid())
+  studentId     String         @map("student_id")
+  courseId      String         @map("course_id")
+  completedById String         @map("completed_by_id")
+  completedAt   DateTime       @default(now()) @map("completed_at")
+  student       StudentProfile @relation(fields: [studentId], references: [userId], onDelete: Cascade)
+  course        Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  completedBy   User           @relation("CourseCompletionReviewer", fields: [completedById], references: [id], onDelete: Restrict)
+
+  @@unique([studentId, courseId])
+  @@index([studentId, completedAt])
+  @@map("course_completions")
+}

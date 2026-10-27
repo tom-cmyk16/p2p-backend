@@ -1,0 +1,96 @@
+model TutorApplication {
+  id                String                       @id @default(cuid())
+  userId            String                       @map("user_id")
+  educationLevel    TutorEducationLevel          @map("education_level")
+  institutionName   String                       @map("institution_name")
+  currentGradeLevel GradeLevel?                  @map("current_grade_level")
+  fieldOfStudy      String?                      @map("field_of_study")
+  yearOfStudy       Int?                         @map("year_of_study")
+  bio               String
+  status            ApplicationStatus            @default(SUBMITTED)
+  rejectionReason   String?                      @map("rejection_reason")
+  reviewedById      String?                      @map("reviewed_by")
+  submittedAt       DateTime                     @default(now()) @map("submitted_at")
+  reviewedAt        DateTime?                    @map("reviewed_at")
+  reviewedBy        User?                        @relation("ReviewerApplications", fields: [reviewedById], references: [id])
+  applicant         User                         @relation("ApplicantApplications", fields: [userId], references: [id], onDelete: Cascade)
+  approvedProfile   TutorProfile?                @relation("ApprovedApplication")
+  documents         TutorQualificationDocument[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("tutor_applications")
+}
+
+model TutorQualificationDocument {
+  id            String           @id @default(cuid())
+  applicationId String           @map("application_id")
+  documentType  DocumentType     @map("document_type")
+  fileUrl       String           @map("file_url")
+  fileName      String           @map("file_name")
+  uploadedAt    DateTime         @default(now()) @map("uploaded_at")
+  application   TutorApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@map("tutor_qualification_documents")
+}
+
+model TutorProfile {
+  userId                String              @id @map("user_id")
+  approvedApplicationId String              @unique @map("approved_application_id")
+  bio                   String
+  educationLevel        TutorEducationLevel @map("education_level")
+  institutionName       String              @map("institution_name")
+  currentGradeLevel     GradeLevel?         @map("current_grade_level")
+  fieldOfStudy          String?             @map("field_of_study")
+  yearOfStudy           Int?                @map("year_of_study")
+  approvedById          String              @map("approved_by")
+  approvedAt            DateTime            @default(now()) @map("approved_at")
+  conversations         Conversation[]
+  ratingsReceived       Rating[]
+  approvedApplication   TutorApplication    @relation("ApprovedApplication", fields: [approvedApplicationId], references: [id])
+  approvedBy            User                @relation("ApprovedByAdmin", fields: [approvedById], references: [id])
+  user                  User                @relation("TutorIdentity", fields: [userId], references: [id], onDelete: Cascade)
+  subjects              TutorSubject[]
+  googleCalendarAccount TutorGoogleAccount?
+  availability          TutorAvailability[]
+  mentorshipSeries      MentorshipSeries[]
+  mentorshipSessions    MentorshipSession[]
+  packageEnrollments   PackageEnrollment[]
+  payments             Payment[]
+  payouts              TutorPayout[]
+
+  @@map("tutor_profiles")
+}
+
+model TutorSubject {
+  tutorId    String       @map("tutor_id")
+  subjectId  String       @map("subject_id")
+  gradeLevel GradeLevel   @map("grade_level")
+  subject    Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  tutor      TutorProfile @relation(fields: [tutorId], references: [userId], onDelete: Cascade)
+
+  @@id([tutorId, subjectId, gradeLevel])
+  @@map("tutor_subjects")
+}
+
+enum TutorEducationLevel {
+  HIGH_SCHOOL
+  UNIVERSITY
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum DocumentType {
+  NATIONAL_ID
+  STUDENT_ID_CARD
+  TRANSCRIPT
+  CERTIFICATE
+  RECOMMENDATION_LETTER
+  OTHER
+}
