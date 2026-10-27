@@ -501,9 +501,18 @@ export const updateUserStatus = async ({
 
 export const listUsers = async ({ role, status, search }) => {
   const where = {};
-  if (role) {
-    where.role = role;
+
+  // Filter out ADMIN users so only regular users (non-admins) appear in user management
+  if (role && role !== "ALL") {
+    if (role === "ADMIN") {
+      where.role = { not: "ADMIN", in: [] };
+    } else {
+      where.role = role;
+    }
+  } else {
+    where.role = { not: "ADMIN" };
   }
+
   if (status) {
     where.status = status;
   }
