@@ -7,6 +7,7 @@ import { prisma } from "./config/db.js";
 import path from "path";
 
 const app = express();
+app.set("trust proxy", 1);
 const allowedOrigins = (
   process.env.FRONTEND_URL ||
   "http://localhost:5173,http://127.0.0.1:5173"
