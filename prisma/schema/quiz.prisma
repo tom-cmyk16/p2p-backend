@@ -5,7 +5,7 @@ model Subject {
   topics        Topic[]
   tutorSubjects TutorSubject[]
   courses       Course[]
-
+  exams        Exam[]
   @@map("subjects")
 }
 
@@ -23,19 +23,23 @@ model Topic {
 }
 
 model Question {
-  id             String              @id @default(cuid())
-  topicId        String              @map("topic_id")
-  createdById    String?             @map("created_by_id")
-  isPublished    Boolean             @default(true) @map("is_published")
-  gradeLevel     GradeLevel          @map("grade_level")
-  questionText   String              @map("question_text")
+  id             String             @id @default(cuid())
+  topicId        String?            @map("topic_id")
+  examId         String?            @map("exam_id")       
+  createdById    String?            @map("created_by_id")
+  isPublished    Boolean            @default(true) @map("is_published")
+  gradeLevel     GradeLevel         @map("grade_level")
+  questionText   String             @map("question_text")
   explanation    String
+  
   options        QuestionOption[]
-  topic          Topic               @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  createdBy      User?               @relation("QuestionAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  topic          Topic?             @relation(fields: [topicId], references: [id], onDelete: Cascade) 
+  exam           Exam?              @relation(fields: [examId], references: [id], onDelete: Cascade)  
+  createdBy      User?              @relation("QuestionAuthor", fields: [createdById], references: [id], onDelete: SetNull)
   attemptAnswers QuizAttemptAnswer[]
 
   @@index([topicId])
+  @@index([examId])
   @@index([gradeLevel])
   @@map("questions")
 }
@@ -84,4 +88,27 @@ model QuizAttemptAnswer {
   @@unique([attemptId, questionId])
   @@index([attemptId])
   @@map("quiz_attempt_answers")
+}
+
+model Exam {
+  id              String       @id @default(cuid())
+  title           String
+  gradeLevel      GradeLevel   @map("grade_level")
+  subjectId       String       @map("subject_id")
+  durationMinutes Int          @default(60) @map("duration_minutes")
+  passingScore    Int          @default(60) @map("passing_score")
+  instructions    String?
+  isPublished     Boolean      @default(true) @map("is_published")
+  createdById     String?      @map("created_by_id")
+  
+  subject         Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  createdBy       User?        @relation("ExamAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  questions       Question[]   
+
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  @@index([subjectId])
+  @@index([gradeLevel])
+  @@map("exams")
 }

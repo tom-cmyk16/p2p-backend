@@ -36,7 +36,7 @@ model User {
   approvedTutorProfiles TutorProfile[]     @relation("ApprovedByAdmin")
   tutorProfile         TutorProfile?       @relation("TutorIdentity")
   region               Region?             @relation(fields: [regionId], references: [id])
-
+   examsCreated Exam[] @relation("ExamAuthor") 
   @@index([role])
   @@index([status])
   @@map("users")

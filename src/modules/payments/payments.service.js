@@ -720,6 +720,8 @@ export const savePackageOffer = async ({
   pricingMode = "STANDARD",
   active,
 }) => {
+
+  console.log("Incoming Package Offer Data:", { packageType, courseId, gradeLevel, amount, pricingMode });
   const target = offerTarget({ packageType, courseId, gradeLevel });
   const standardAmountMinor = toMinorUnits(standardAmount ?? amount);
   const customAmountMinor = customAmount === undefined
