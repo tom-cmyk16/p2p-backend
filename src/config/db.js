@@ -4,14 +4,19 @@ dotenv.config();
 import { PrismaClient } from "../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const connectionString = process.env.DATABASE_URL;
+let prisma;
 
-if (!connectionString) {
-  console.error("❌ DATABASE_URL is not set in environment variables!");
+try {
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    console.error("❌ CRITICAL ERROR: DATABASE_URL is missing in environment variables!");
+  }
+
+  const adapter = new PrismaPg({ connectionString });
+  prisma = new PrismaClient({ adapter });
+  console.log("✅ Database connected successfully!");
+} catch (error) {
+  console.error("❌ Failed to initialize Prisma Client:", error.message);
 }
 
-const adapter = new PrismaPg({
-  connectionString,
-});
-
-export const prisma = new PrismaClient({ adapter });
+export { prisma };
