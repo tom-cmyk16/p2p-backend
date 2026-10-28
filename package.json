@@ -13,7 +13,7 @@
     "start": "node src/server.js",
     "lint": "eslint .",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:generate": "prisma generate",
+    "prisma:generate": "prisma generate"
     
   },
   "keywords": [],
